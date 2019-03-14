@@ -1,0 +1,4 @@
+C:/Users/Roman/CLionProjects/TIMP/cmake-build-debug/CMakeFiles/test_task2-1.dir
+C:/Users/Roman/CLionProjects/TIMP/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Roman/CLionProjects/TIMP/cmake-build-debug/CMakeFiles/test_task2-2.dir
+C:/Users/Roman/CLionProjects/TIMP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
