@@ -8,6 +8,7 @@
 #include <iostream>
 #include "ctime"
 
+
 template <typename T>
 struct Node
 {
@@ -19,27 +20,21 @@ struct Node
 
     Node():left(nullptr), right(nullptr), parent(nullptr) {}
     Node(int _key, T znach):value(znach), key(_key), left(nullptr), right(nullptr), parent(nullptr) {}
-    Node(Node<T>* par, int _key, T znach);
+    Node(Heap<T>* par, int _key, T znach):value(znach), key(_key), left(nullptr), right(nullptr), parent(par)
+    {
+        Heap<T>::top++;
+    }
 
-    Node<T>* Parent(Node<T>* p) {
-        return p->parent;
-    }
-    Node<T>* Left(Node<T>* l) {
-        return l->left;
-    }
-    Node<T>* Right(Node<T>* r) {
-        return r->right;
-    }
 };
 
-template <typename T>
-class Heap : Node<T>
-{
-private:
-    Node<T>* root;
-    int top;
 
+template <typename T>
+class Heap
+{
 public:
+    int top = 0;
+    Node<T>* root;
+
     Heap():top(0) {}
     Heap(int _key, T znach):top(1) { root = new Node<T>(_key,znach); }
     int heap_size();
@@ -67,8 +62,8 @@ T Heap<T>::max_key() {
 template <typename T>
 void Heap<T>::Max_Heapify(Node<T>* A)
 {
-    Node<T>* l = Left(A);
-    Node<T>* r = Right(A);
+    Node<T>* l = A->left;
+    Node<T>* r = A->right;
     Node<T>* largest;
     if ((l != nullptr) && (l->key > A->key))
     {
@@ -83,13 +78,13 @@ void Heap<T>::Max_Heapify(Node<T>* A)
     if (largest != A) {
         int tmp;
         tmp = A->key;
-        A->key = Parent(A)->key;
-        Parent(A)->key = tmp;
+        A->key = A->parent->key;
+        A->parent->key = tmp;
 
         T element;
         element = A->value;
-        A->value = Parent(A)->value;
-        Parent(A)->value = element;
+        A->value = A->parent->value;
+        A->parent->value = element;
         Max_Heapify(largest);
     }
 }
@@ -98,7 +93,7 @@ template <typename T>
 void Heap<T>::Build_Max_Heap(Node<T>* A) {
     while (A != nullptr) {
         Max_Heapify(A);
-        A = Parent(A);
+        A = A->parent;
     }
 }
 
@@ -107,17 +102,16 @@ void Heap<T>::Heap_Increase_Key(Node<T>* A, int i) {
     if(i < A->key) throw "Новый ключ меньше текущего!";
 
     A->key = i;
-    while (Parent(A) != nullptr && Parent(A)->key < A->key) {
+    while (A->parent != nullptr && A->parent->key < A->key) {
         int tmp;
         tmp = A->key;
-        A->key = Parent(A)->key;
-        Parent(A)->key = tmp;
+        A->key = A->parent->key;
+        A->parent->key = tmp;
 
         T element;
         element = A->value;
-        A->value = Parent(A)->value;
-        Parent(A)->value = element;
-   //     A = Parent(A);
+        A->value = A->parent->value;
+        A->parent->value = element;
     }
 }
 
@@ -127,59 +121,58 @@ void Heap<T>::Max_Heap_Insert(Node<T> *A, int i, T value) {
     {
         Node<T> node(i, value);
         root = &node;
-        top++;
     }
     if(top == 1)
     {
-        Node<T>* node(root, i, value);
-        if(node->key > root->key)
+        Heap<T>::Node<T> node(root, i, value);
+        if(node.key > root->key)
         {
-            node->parent =  root;
-            root->left = node;
+            node.parent =  root;
+            root->left = &node;
         }
         else
         {
-            node->parent = root;
-            root->right = node;
+            node.parent = root;
+            root->right = &node;
         }
 
         Heap_Increase_Key(A, i);
-        top++;
+
     }
     if(top > 1)
     {
-        Node<T>* node(A, i, value);
+        Heap<T>::Node<T> node(i, value);
         if (A->left != nullptr && A->right != nullptr)
             A = A->left;
-        if(A->left != nullptr && A->right != nullptr && Parent(A)->right->left == nullptr && Parent(A)->right->right == nullptr)
-            A = Parent(A)->right;
-        if (node->key <= A->key) {
+        if(A->left != nullptr && A->right != nullptr && A->parent->right->left == nullptr && A->parent->right->right == nullptr)
+            A = A->parent->right;
+        if (node.key <= A->key) {
             if (A->right != nullptr) {
                 A = A->left;
-                node->parent = A;
-                A->left = node;
+                node.parent = A;
+                A->left = &node;
             } else {
-                node->parent = A;
-                A->right = node;
+                node.parent = A;
+                A->right = &node;
             }
         }
-        if (node->key > A->key)
+        if (node.key > A->key)
         {
             if (A->left != nullptr)
             {
-                node->parent = A;
-                A->left = node;
+                node.parent = A;
+                A->left = &node;
             }
             else
             {
-                node->parent = A;
-                A->left = node;
+                node.parent = A;
+                A->left = &node;
             }
         }
 
         Heap_Increase_Key(A, i);
-        top++;
     }
+    top++;
 }
 
 template<typename T>
