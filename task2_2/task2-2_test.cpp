@@ -13,25 +13,23 @@
 #include "../catch.hpp"
 
 TEST_CASE("Test1", "task2-2_Tests") {
-    Heap<int>* heap = new Heap<int>(10,20);
-    Node<int> *node = new Node<int>(heap, 5, 5);
+    Heap* heap = new Heap(10);
+    heap->Max_Heap_Insert(heap->root, 5);
 
-    heap->Max_Heap_Insert(node, 7,7);
- //   heap->Max_Heap_Insert(heap, 30,31);
- //   heap->Max_Heap_Insert(heap, 15,32);
- //   heap->Max_Heap_Insert(heap, 3,7);
+    heap->Max_Heap_Insert(heap->root, 12);
+
+    heap->Max_Heap_Insert(heap->root->right, 1);
+   // heap->Max_Heapify(heap->root->right);
+  //  heap->Max_Heapify(heap->root->left);
+    heap->Build_Max_Heap(heap->root->right->left);
 
 
+    REQUIRE(heap->max_key() == 12);
 
-
-   // heap->Max_Heap_Insert(heap, 3, 30);
-   // heap->Max_Heap_Insert(heap, 10, 50);
-   // heap->Max_Heap_Insert(heap, 6, 7);
-    REQUIRE(heap->max_key() == 10);
 
 }
 
-TEST_CASE("Test2", "task2-2_Tests") {
+//TEST_CASE("Test2", "task2-2_Tests") {
 /*    Heap<int>* heap = new Heap<int>(10,20);
     Node<int>* node = new Node<int>();
     heap->Max_Heap_Insert(node, 30,31);
@@ -40,5 +38,5 @@ TEST_CASE("Test2", "task2-2_Tests") {
     heap->Max_Heap_Insert(node, 30,34);
 
     REQUIRE(heap->max_key() == 30);
-*/
-}
+
+}*/
