@@ -15,28 +15,30 @@
 TEST_CASE("Test1", "task2-2_Tests") {
     Heap* heap = new Heap(10);
     heap->Max_Heap_Insert(heap->root, 5);
-
     heap->Max_Heap_Insert(heap->root, 12);
+    heap->Max_Heap_Insert(heap->root->left, 7);
+    heap->Max_Heap_Insert(heap->root->left, 15);
 
-    heap->Max_Heap_Insert(heap->root->right, 1);
-   // heap->Max_Heapify(heap->root->right);
-  //  heap->Max_Heapify(heap->root->left);
-    heap->Build_Max_Heap(heap->root->right->left);
+   // heap->Build_Max_Heap(heap->root->left);
 
+    heap->Max_Heap_Insert(heap->root->left, 16);
+    heap->Max_Heap_Insert(heap->root->left, 17);
+    heap->Max_Heap_Insert(heap->root->left, 18);
+    heap->Max_Heap_Insert(heap->root->left->left, 19);
 
-    REQUIRE(heap->max_key() == 12);
+    heap->Build_Max_Heap(heap->root->left->left->left);
+
+    REQUIRE(heap->max_key() == 19);
+   // REQUIRE(heap->Heap_Extract_Max() == 19);
+    heap->Heap_Extract_Max();
+    REQUIRE(heap->Heap_Extract_Max() == 18);
+    REQUIRE(heap->Heap_Extract_Max() == 17);
+    REQUIRE(heap->Heap_Extract_Max() == 16);
 
 
 }
 
 //TEST_CASE("Test2", "task2-2_Tests") {
-/*    Heap<int>* heap = new Heap<int>(10,20);
-    Node<int>* node = new Node<int>();
-    heap->Max_Heap_Insert(node, 30,31);
-    heap->Max_Heap_Insert(node, 30,32);
-    heap->Max_Heap_Insert(node, 30,33);
-    heap->Max_Heap_Insert(node, 30,34);
-
-    REQUIRE(heap->max_key() == 30);
+/*
 
 }*/
