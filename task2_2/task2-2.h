@@ -37,6 +37,7 @@ public:
     void Heap_Increase_Key(Node* A, int i);
     void Max_Heap_Insert(Node* A, int i);
     int Heap_Extract_Max();
+    void Svoistvo(Node* A, Node* B);
     void Heap_Change_key(Node* A, int i);
 };
 
@@ -83,6 +84,27 @@ void Heap::Max_Heapify(Node* A)
         }
         Max_Heapify(largest);
     }
+
+
+}
+
+void Heap::Svoistvo(Node *A, Node *B) {
+    while(A->parent != nullptr && B->parent != nullptr)
+    {
+        if (A->left != nullptr && A->left->key > B->key) {
+            int tmp = A->left->key;
+            A->left->key = B->key;
+            B->key = tmp;
+        }
+        if (A->right != nullptr && A->right->key > B->key) {
+            int tmp = A->right->key;
+            A->right->key = B->key;
+            B->key = tmp;
+        }
+        A = A->parent;
+        B = B->parent;
+    }
+
 }
 
 
@@ -98,7 +120,7 @@ void Heap::Heap_Increase_Key(Node* A, int i) {
    // if(i < A->key) throw "Новый ключ меньше текущего!";
 
 
-    while (A->parent != nullptr && A->key < i )
+    while (A->parent != nullptr && (A->key < i || (i > A->parent->right->key && A->parent->right != nullptr)))
     {
         int tmp;
 
@@ -114,6 +136,18 @@ void Heap::Heap_Increase_Key(Node* A, int i) {
             A->right->key = A->key;
             A->key = tmp;
         }
+    /*    if (i > A->parent->right->key )
+        {
+            tmp = A->left->key;
+            A->left->key =  A->parent->right->key;
+            A->parent->right->key = tmp;
+        }
+        if(A->right != nullptr && i > A->parent->right->key)
+        {
+            tmp = A->right->key;
+            A->right->key =  A->parent->right->key;
+            A->parent->right->key = tmp;
+        }*/
         A = A->parent;
     }
     if (A->parent == nullptr && A->right != nullptr )
@@ -194,8 +228,19 @@ int Heap::Heap_Extract_Max() {
 
     Node* pop = root;
     int max = pop->key;
-    if (root->left != nullptr)
+    if (root->left != nullptr && root->right == nullptr)
         root = root->left;
+    if (root->left != nullptr && root->right != nullptr)
+    {
+        if(root->left->key >= root->right->key)
+        {
+            root = root->left;
+        }
+        else
+        {
+            root = root->right;
+        }
+    }
     if (root->left == nullptr && root->right != nullptr)
         root = root->right;
     delete pop;
@@ -209,11 +254,3 @@ void Heap::Heap_Change_key(Node *A, int i) {
     //TODO Дописать смену ключа
 
 }
-
-
-
-
-
-
-
-
