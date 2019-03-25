@@ -20,7 +20,6 @@ struct Node
     Node(Node* par, int _key):key(_key), left(nullptr), right(nullptr), parent(par) {}
 };
 
-
 class Heap
 {
 public:
@@ -33,11 +32,9 @@ public:
     int max_key();
 
     void Max_Heapify(Node* A);
-    void Build_Max_Heap(Node* A);
     void Heap_Increase_Key(Node* A, int i);
     void Max_Heap_Insert(Node* A, int i);
     int Heap_Extract_Max();
-    void Svoistvo(Node* A, Node* B);
     void Heap_Change_key(Node* A, int i);
 };
 
@@ -56,24 +53,24 @@ void Heap::Max_Heapify(Node* A)
 {
     Node* l = A->left;
     Node* r = A->right;
-    Node* largest;
-    if ((l != nullptr) && (l->key > A->key))
+    Node* largest = new Node();
+    if (l != nullptr && l->key > A->key)
     {
-        largest = l;
+        largest->key = l->key;
     } else {
-        largest = A;
+        largest->key = A->key;
     }
 
-    if ((r != nullptr) && (r->key > largest->key)) {
-        largest = r;
+    if (r != nullptr && r->key > largest->key) {
+        largest->key = r->key;
     }
-    if (largest != A) {
+    if (largest->key != A->key) {
         if(A->parent != nullptr)
         {
             int tmp;
             tmp = A->key;
-            A->key = A->parent->key;
-            A->parent->key = tmp;
+            A->key = largest->key;
+            largest->key = tmp;
         }
         else
         {
@@ -84,43 +81,11 @@ void Heap::Max_Heapify(Node* A)
         }
         Max_Heapify(largest);
     }
-
-
 }
-
-void Heap::Svoistvo(Node *A, Node *B) {
-    while(A->parent != nullptr && B->parent != nullptr)
-    {
-        if (A->left != nullptr && A->left->key > B->key) {
-            int tmp = A->left->key;
-            A->left->key = B->key;
-            B->key = tmp;
-        }
-        if (A->right != nullptr && A->right->key > B->key) {
-            int tmp = A->right->key;
-            A->right->key = B->key;
-            B->key = tmp;
-        }
-        A = A->parent;
-        B = B->parent;
-    }
-
-}
-
-
-void Heap::Build_Max_Heap(Node* A) {
-    while (A != nullptr) {
-        Max_Heapify(A);
-        A = A->parent;
-    }
-}
-
 
 void Heap::Heap_Increase_Key(Node* A, int i) {
-   // if(i < A->key) throw "Новый ключ меньше текущего!";
 
-
-    while (A->parent != nullptr && (A->key < i || (i > A->parent->right->key && A->parent->right != nullptr)))
+    while (A->parent != nullptr && A->key < i )
     {
         int tmp;
 
@@ -129,25 +94,25 @@ void Heap::Heap_Increase_Key(Node* A, int i) {
             tmp = A->left->key;
             A->left->key = A->key;
             A->key = tmp;
+            if(A->left->key > A->parent->right->key)
+            {
+                int tmp1 = A->left->key;
+                A->left->key = A->parent->right->key;
+                A->parent->right->key = tmp1;
+            }
         }
         if (A->right != nullptr && A->right->key == i)
         {
             tmp = A->right->key;
             A->right->key = A->key;
             A->key = tmp;
+            if(A->right->key > A->parent->right->key)
+            {
+                int tmp1 = A->right->key;
+                A->right->key = A->parent->right->key;
+                A->parent->right->key = tmp1;
+            }
         }
-    /*    if (i > A->parent->right->key )
-        {
-            tmp = A->left->key;
-            A->left->key =  A->parent->right->key;
-            A->parent->right->key = tmp;
-        }
-        if(A->right != nullptr && i > A->parent->right->key)
-        {
-            tmp = A->right->key;
-            A->right->key =  A->parent->right->key;
-            A->parent->right->key = tmp;
-        }*/
         A = A->parent;
     }
     if (A->parent == nullptr && A->right != nullptr )
@@ -184,15 +149,16 @@ void Heap::Max_Heap_Insert(Node* A, int i) {
     if(top == 1)
     {
         Node* node = new Node(root, i);
-        if(node->key > root->key)
+        if(root->left == nullptr)
         {
             root->left = node;
         }
         else {
             root->right = node;
         }
-
+        //TODO можно убрать правый указатель
     }
+
     if(top > 1)
     {
         Node* node = new Node(i);
@@ -205,11 +171,11 @@ void Heap::Max_Heap_Insert(Node* A, int i) {
             node->parent = A;
             A->right = node;
         }
-        if (A->left == nullptr && A->right != nullptr)
+       /* if (A->left == nullptr && A->right != nullptr)
         {
             node->parent = A;
             A->left = node;
-        }
+        }*/
         if (A->left == nullptr && A->right == nullptr)
         {
             node->parent = A;
@@ -217,38 +183,48 @@ void Heap::Max_Heap_Insert(Node* A, int i) {
         }
     }
 
-
     top++;
     Heap_Increase_Key(A, i);
 }
 
 
 int Heap::Heap_Extract_Max() {
-    if (top == 0) throw "Куча пуста!";
+    if (!top) throw "Куча пуста!";
+    int max = root->key;
 
+    if (top == 1)
+    {
+        delete root;
+        top--;
+        return max;
+    }
     Node* pop = root;
-    int max = pop->key;
     if (root->left != nullptr && root->right == nullptr)
         root = root->left;
+   /* if (root->left == nullptr && root->right != nullptr)
+        root = root->right;*/
     if (root->left != nullptr && root->right != nullptr)
     {
         if(root->left->key >= root->right->key)
         {
+            root->right->parent = root->left;
             root = root->left;
+            root->parent = nullptr;
+            delete pop;
+
         }
         else
         {
+            root->left->parent = root->right;
             root = root->right;
+            root->parent = nullptr;
+            delete pop;
         }
     }
-    if (root->left == nullptr && root->right != nullptr)
-        root = root->right;
-    delete pop;
-    //TODO перераспределение памяти
+    Max_Heapify(root);
     top--;
     return max;
 }
-
 
 void Heap::Heap_Change_key(Node *A, int i) {
     //TODO Дописать смену ключа

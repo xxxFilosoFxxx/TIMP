@@ -23,16 +23,20 @@ TEST_CASE("Test1", "task2-2_Tests") {
     heap->Max_Heap_Insert(heap->root->right, 17);
     heap->Max_Heap_Insert(heap->root->left->left, 18);
     heap->Max_Heap_Insert(heap->root->left->left, 19);
-
+    heap->Max_Heap_Insert(heap->root->right->left, 11);
     REQUIRE(heap->max_key() == 19);
-   // REQUIRE(heap->Heap_Extract_Max() == 19);
+
     heap->Heap_Extract_Max();
     REQUIRE(heap->max_key() == 18);
 
 
 }
 
-//TEST_CASE("Test2", "task2-2_Tests") {
-/*
+TEST_CASE("Test2", "task2-2_Tests") {
+    Heap* heap = new Heap(10);
+    heap->Max_Heap_Insert(heap->root, 8);
+    REQUIRE(heap->Heap_Extract_Max() == 10);
+    REQUIRE(heap->Heap_Extract_Max() == 8);
+    REQUIRE_THROWS(heap->Heap_Extract_Max());
+}
 
-}*/
