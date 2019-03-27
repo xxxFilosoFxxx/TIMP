@@ -5,40 +5,44 @@
 
 #include <iostream>
 #include "ctime"
+#include "vector"
+
+using namespace std;
 
 template <typename T>
-class Node
+struct Node
 {
-private:
-    Node<T>* parent;
-    Node<T>* right;
-    Node<T>* left;
+    Node* parent;
+    Node* right;
+    Node* left;
     T value;
     int key;
 
-public:
-    Node():left(NULL), right(NULL), parent(NULL) {}
-    Node(const int& _key, const T& znach):value(znach), key(_key), left(NULL), right(NULL), parent(NULL) {}
-    Node(Node* par, const int& _key, const T& znach):value(znach), key(_key), left(NULL), right(NULL), parent(par) {}
-    void Max_Heapify(int i, Node* A);
-    void Build_Max_Heap(Node* A);
-    void Heap_Increase_Key(Node* A, int i);
-    void Max_Heap_Insert(Node* A, int i, T value);
-    T Heap_Extract_Max(Node* A);
+    Node():left(nullptr), right(nullptr), parent(nullptr) {}
+    Node(int _key, T _value):key(_key), value(_value), left(nullptr), right(nullptr), parent(nullptr) {}
+    Node(Node* par, int _key, T _value):key(_key), value(_value), left(nullptr), right(nullptr), parent(par) {}
 };
 
 template <typename T>
 class Heap
 {
-private:
-    Node<T>* root;
-    int top;
-
 public:
-    Heap():top(0) {}
-    Heap(const int& _key, const T& znach):top(1) { root = new Node<T>(_key,znach); }
-    int heap_size();
+    int top = 0;
+    Node<T>* root;
 
+    Heap():top(0) {}
+    Heap(int _key, T _value):top(1) { root = new Node<T>(_key, _value); }
+    ~Heap();
+    int heap_size();
+    int max_key();
+    T max_value();
+
+    void Max_Heapify(Node<T>* A);
+    void Heap_Increase_Key(Node<T>* A, int i);
+    void Max_Heap_Insert(int i, T _value);
+    int Heap_Extract_Max();
+    void Heap_Change_key(Node<T>* A, int i);
+    vector<bool> to_bin (int n);
 };
 
 template <typename T>
@@ -47,69 +51,253 @@ int Heap<T>::heap_size()
     return top;
 }
 
-//good for int and double
+template<typename T>
+T Heap<T>::max_value() {
+    if (top == 0)
+        throw "Heap is empty!";
+    return root->value;
+
+}
+
 template <typename T>
-void Node<T>::Max_Heapify(int i, Node *A)
+int Heap<T>::max_key() {
+    return root->key;
+}
+
+template <typename T>
+void Heap<T>::Max_Heapify(Node<T>* A)
 {
-    int largest;
-    int l = left(i); //TODO: i->left
-    int r = right(i);
-    if ((A->l > A->i) && (l <= Heap<T>::heap_size()) )
+    Node<T>* l = A->left;
+    Node<T>* r = A->right;
+    Node<T>* largest = new Node<T>();
+    if (l != nullptr || r != nullptr)
     {
-        largest = l;
-    } else {
-        largest = i;
-    }
+        if(l != nullptr) {
+            if (l->key > A->key)
+            {
+                largest = l;
+            }
+            else
+            {
+                largest = A;
+            }
+        }
+        if (r != nullptr && r->key > largest->key) {
+            largest = r;
+        }
+        if (largest->key != A->key) {
+            int tmp;
+            tmp = A->key;
+            A->key = largest->key;
+            largest->key = tmp;
 
-    if ((r <= Heap<T>::heap_size()) && (A->r > A->largest) ) {
-        largest = r;
-    }
-    if (largest != i) {
-     Node* tmp;
-     tmp = A->i;
-     A->i = A->largest;
-     A->largest = tmp;
-     Max_Heapify(largest, A);
+            T _tmp;
+            _tmp = A->value;
+            A->value = largest->value;
+            largest->value = _tmp;
+            Max_Heapify(largest);
+        }
     }
 }
 
 template <typename T>
-void Node<T>::Build_Max_Heap(Node *A) {
-    for(int i = Heap<T>::heap_size()/2;i >= 1;i--)
+void Heap<T>::Heap_Increase_Key(Node<T>* A, int i) {
+    while (A->parent != nullptr && A->key < i )
     {
-        Max_Heapify(i,A);
+        int tmp;
+
+        if (A->left->key == i)
+        {
+            tmp = A->left->key;
+            A->left->key = A->key;
+            A->key = tmp;
+
+            T _tmp = A->left->value;
+            A->left->value = A->value;
+            A->value = _tmp;
+
+
+            if(A->left->key > A->parent->right->key)
+            {
+                int tmp1 = A->left->key;
+                A->left->key = A->parent->right->key;
+                A->parent->right->key = tmp1;
+
+                T tmp2 = A->left->value;
+                A->left->value = A->parent->right->value;
+                A->parent->right->value = tmp2;
+            }
+        }
+        if (A->right != nullptr && A->right->key == i)
+        {
+            tmp = A->right->key;
+            A->right->key = A->key;
+            A->key = tmp;
+
+            T _tmp = A->right->value;
+            A->right->value = A->value;
+            A->value = _tmp;
+            if(A->right->key > A->parent->right->key)
+            {
+                int tmp1 = A->right->key;
+                A->right->key = A->parent->right->key;
+                A->parent->right->key = tmp1;
+
+                T tmp2 = A->right->value;
+                A->right->value = A->parent->right->value;
+                A->parent->right->value = tmp2;
+            }
+        }
+        //  Max_Heapify(root);
+        A = A->parent;
+    }
+    if (A->parent == nullptr && A->right != nullptr )
+    {
+        if(root->key < A->right->key)
+        {
+            int tmp;
+            tmp = A->right->key;
+            A->right->key = root->key;
+            root->key = tmp;
+
+            T _tmp;
+            _tmp = A->right->value;
+            A->right->value = root->value;
+            root->value = _tmp;
+        }
+    }
+    if (A->parent == nullptr && A->left != nullptr )
+    {
+        if(root->key < A->left->key)
+        {
+            int tmp;
+            tmp = A->left->key;
+            A->left->key = root->key;
+            root->key = tmp;
+
+            T _tmp;
+            _tmp = A->left->value;
+            A->left->value = root->value;
+            root->value = _tmp;
+        }
     }
 }
 
-template<typename T>
-void Node<T>::Heap_Increase_Key(Node *A, int i) {
-    if(key < A->key) throw "Новый ключ меньше текущего!";
+template <typename T>
+vector<bool> Heap<T>::to_bin(int n)
+{
+    vector<bool> vec;
+    while (n > 0)
+    {
+        vec.push_back(n % 2);
+        n/= 2;
+    }
+    return vec;
+}
 
-    A->key = i;
-    while (A->parent != NULL && A->parent->key < A->key) {
-            Node* tmp;
-            tmp = A->key;
-            A->key = A->parent->key;
-            A->parent->key = tmp;
-            key = parent->key;
+template <typename T>
+void Heap<T>::Max_Heap_Insert(int i, T _value) {
+    if (top == 0)
+    {
+        Node<T>* node = new Node<T>(i, _value);
+        root = node;
+    }
+    top++;
+
+    if (top > 1)
+    {
+        Node<T>* node = root;
+        vector<bool> v = to_bin(top);
+        for (int i = v.size() - 2; i > 0; --i) {
+            if (v[i] == 1)
+                node = node->right;
+            else
+                node = node->left;
+        }
+
+        Node<T>* new_node = new Node<T>(node, i, _value);
+        if (v[0] == 1)
+            node->right = new_node;
+        else
+            node->left = new_node;
+
+        Heap_Increase_Key(node, i);
     }
 }
 
-template<typename T>
-void Node<T>::Max_Heap_Insert(Node *A, int i, T value) {
-    Heap<T>::top++;
-    A->key = i;
-    A->value = value;
-    Heap_Increase_Key(A, A->key) ;
-    Max_Heapify(A->key,A);
-}
+template <typename T>
+int Heap<T>::Heap_Extract_Max() {
+    if (!top) throw "Heap is empty!";
+    int max = root->key;
 
-template<typename T>
-T Node<T>::Heap_Extract_Max(Node *A) {
-    if (heap_size() < 1) throw "Куча пуста!";
-    T max = A[1];
-    A[1] = A->heap_size();
+    if (top == 1)
+    {
+        delete root;
+        top--;
+        return max;
+    }
+    Node<T>* pop = root;
+    vector<bool> v = to_bin(top);
+
+    if (root->left != nullptr && root->right == nullptr)
+        root = root->left;
+    if (root->left != nullptr && root->right != nullptr)
+    {
+        for (int i = v.size() - 2; i > 0; --i)
+        {
+            if (v[i] == 1)
+                pop = pop->right;
+            else
+                pop = pop->left;
+        }
+
+        bool flag;
+        if(pop->right != nullptr)
+        {
+            pop = pop->right;
+            flag = true;
+        }
+        else
+        {
+            pop = pop->left;
+            flag = false;
+        }
+        int tmp = pop->key;
+        pop->key = root->key;
+        root->key = tmp;
+
+        T _tmp = pop->value;
+        pop->value = root->value;
+        root->value = _tmp;
+
+        Node<T>* parent = pop->parent;
+        if(flag)
+            parent->right = nullptr;
+        else
+            parent->left = nullptr;
+    }
+    delete pop;
+    Max_Heapify(root);
     top--;
-    Max_Heapify(1,A);
-    return  max;
+    return max;
 }
+
+template <typename T>
+Heap<T>::~Heap()
+{
+    while (top != 0)
+        Heap_Extract_Max();
+}
+
+template <typename T>
+void Heap<T>::Heap_Change_key(Node<T>* A, int i)
+{
+    if (!top) throw "Heap is empty!";
+
+    A->key = i;
+    if (A->parent != nullptr)
+        Heap_Increase_Key(A->parent, i);
+    else
+        Heap_Increase_Key(A, i);
+}
+
