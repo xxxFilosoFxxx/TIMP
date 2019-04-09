@@ -13,10 +13,9 @@ using namespace std;
 class Graph
 {
 private:
-    const int V = 10000000;  // Количество вершин
-    const int E = 10000;  // Количество рёбер
+    const int V = 100000;  // Количество вершин
     vector < pair < int, pair<int, int > > > graph;  // Вес, Направление из первой вершины, Направление из второй вершины
-    std::vector<int> tree_id ; // Множество вершин в форме чисел
+    std::vector<int> tree_id;
 
 public:
     vector<pair<int, int> > result;
@@ -24,11 +23,6 @@ public:
     const int vertex()
     {
         return this->V;
-    }
-
-    const int node()
-    {
-        return this->E;
     }
 
     Graph(){}

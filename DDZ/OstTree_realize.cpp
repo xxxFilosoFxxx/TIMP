@@ -12,7 +12,6 @@ void Graph::add_node(int from, int to, int weight){
 
 int Graph::find(int v) {
     return (v == tree_id[v]) ? v : (tree_id[v] = find(tree_id[v]));
-
 }
 
 void Graph::Union(int x, int y)  {
@@ -26,9 +25,9 @@ void Graph::Union(int x, int y)  {
 
 void Graph::KruskalPoisk() {
     sort(graph.begin(), graph.end());
-    tree_id.resize(V);
+    tree_id.resize(vertex());
 
-    for (int i = 0; i < V; i++)
+    for (int i = 0; i < vertex(); i++)
     {
         tree_id[i] = i;
     }
