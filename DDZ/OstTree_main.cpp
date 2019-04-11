@@ -8,9 +8,9 @@ int main()
 {
     Graph g;
     srand(time(0));
-    for (int i = 1; i < 100000; i++)
+    for (int i = 1; i < 1000; i++)
     {
-        g.add_node(rand()%100000, rand()%100000 ,rand()%100);
+        g.add_node(rand()%1000, rand()%1000 ,rand()%100);
     }
 
 //    g.add_node(1,2,10);
