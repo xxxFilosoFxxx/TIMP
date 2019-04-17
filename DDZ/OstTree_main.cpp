@@ -1,5 +1,5 @@
 #include <iostream>
-#include "time.h"
+#include "ctime"
 #include "OstTree.h"
 
 using namespace std;
@@ -8,9 +8,9 @@ int main()
 {
     Graph g;
     srand(time(0));
-    for (int i = 1; i < 1000; i++)
+    for (int i = 1; i < 10000000; i++)
     {
-        g.add_node(rand()%1000, rand()%1000 ,rand()%100);
+        g.add_node(rand()%10000000, rand()%10000000 ,rand()%100);
     }
 
 //    g.add_node(1,2,10);
@@ -22,11 +22,11 @@ int main()
 //    g.add_node(5,4,40);
 //    g.add_node(3,5,60);
 
-    clock_t time;
-    time = clock();
+    clock_t times;
+    times = clock();
     g.KruskalPoisk();
-    time = clock() - time;
-    cout << (double)time/CLOCKS_PER_SEC << " what?!" << endl;
+    times = clock() - times;
+    cout << (double)times/CLOCKS_PER_SEC << " what?!" << endl;
 
     return 0;
 }

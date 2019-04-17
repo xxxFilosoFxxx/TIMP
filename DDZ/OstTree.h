@@ -6,22 +6,23 @@
 #include <iostream>
 #include "vector"
 #include "algorithm"
+#include "ctime"
 
 using namespace std;
 
 class Graph
 {
 private:
-    const int V = 1000;  // Количество вершин
+    const int E = 10000000;  // Количество связей между вершинами (рёбра)
     vector < pair < int, pair<int, int > > > graph;  // Вес, Направление из первой вершины, Направление из второй вершины
     std::vector<int> tree_id;  // Принадлежность вершины тому или иному поддереву
                                // хранится номер дерева, которому она принадлежит
 public:
     vector<pair<int, int> > result;
     int sum = 0;
-    const int vertex()
+    const int node()
     {
-        return this->V;
+        return this->E;
     }
 
     Graph(){}
@@ -34,7 +35,6 @@ public:
     int find(int v);
     void Union (int x, int y);
     void KruskalPoisk ();
-
 };
 
 

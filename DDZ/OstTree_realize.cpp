@@ -1,6 +1,7 @@
 #include <iostream>
 #include "vector"
 #include "algorithm"
+#include "ctime"
 #include "OstTree.h"
 
 using namespace std;
@@ -24,9 +25,9 @@ void Graph::Union(int x, int y)  {
 
 void Graph::KruskalPoisk() {
     sort(graph.begin(), graph.end());
-    tree_id.resize(vertex());
+    tree_id.resize(node());
 
-    for (int i = 0; i < vertex(); i++)
+    for (int i = 0; i < node(); i++)
     {
         tree_id[i] = i;
     }
@@ -41,7 +42,6 @@ void Graph::KruskalPoisk() {
             Union(from, to);
         }
     }
-
     //*************************************
 //        for (int i = 0; i < result.size(); i++)
 //        {

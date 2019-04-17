@@ -1,5 +1,5 @@
 #include <iostream>
-#include "time.h"
+#include "ctime"
 
 #include "OstTree.h"
 #define CATCH_CONFIG_MAIN
@@ -7,7 +7,6 @@
 
 TEST_CASE("Test1", "DDZ_Tests") {
     Graph g;
-
     g.add_node(1,2,10);
     g.add_node(3,1,20);
     g.add_node(3,4,30);
