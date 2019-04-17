@@ -34,9 +34,13 @@ Node *Node::find_or_create_child(const char to_find)
 void Node::add_postfix_to(Node *node, const char *postfix, const int& value)
 {
     if (postfix == nullptr) throw "Ошибка проверки постфикса!";
+    int max = 0;
     while(*postfix != 0) {
         node = node->find_or_create_child(*postfix++ );
+        max++;
     }
+    if (height < max)
+        height = max;
     node->flag = true;
     node->value = value;
 }
@@ -93,4 +97,8 @@ void Trie::print_search(const char *s) {
     {
         cout << "Not found word!" << endl;
     }
+}
+
+int Trie::tree_height() {
+    return root.height;
 }

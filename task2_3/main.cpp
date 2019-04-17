@@ -17,6 +17,7 @@ int main()
     trie.print_search("");
     cout << trie.search("avto") << endl;
     cout << trie.search("") << endl;
+    cout << trie.tree_height() << endl;
 
     return 0;
 }
