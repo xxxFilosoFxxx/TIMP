@@ -10,10 +10,10 @@ private:
     int value;
     char key;
     vector<Node*> child;
-    Node* find_child(char to_find );
-    Node* find_or_create_child(char to_find );
-    Node* find_postfix_in(Node* root, const char* postfix );
-    void add_postfix_to( Node* node, const char* postfix, const int& value);
+    Node* find_child(char _find );
+    Node* find_or_create_child(char _find );
+    Node* find_prefix_node(Node* root, const char* prefix );
+    void add_prefix_node(Node* node, const char* prefix, const int& value);
     void clear();
 public:
     int height = 0;
@@ -22,9 +22,9 @@ public:
     ~Node() { clear(); }
 
     int _value() { return this->value;}
-    void add_postfix(const char * postfix, const int& _value);
-    Node* has_postfix(const char* postfix);
-    bool has_postfix(const char* postfix, bool& _flag);
+    void add_prefix(const char * prefix, const int& _value);
+    Node* get_prefix_node(const char* prefix);
+    bool get_prefix(const char* prefix, bool& _flag);
 
 };
 
@@ -34,7 +34,7 @@ private:
     Node root;
 public:
     void insert(const char* s, int _value);
-    Node* search_str(const char* s);
+    Node* search_node(const char* s);
     bool search (const char* s);
     void print_search(const char* s);
     int tree_height();

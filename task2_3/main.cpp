@@ -11,13 +11,17 @@ int main()
     trie.insert("krash", 3);
     trie.insert("avto", 4);
     trie.insert("privet", 5);
-    trie.insert("parkovka", 6);
+    trie.insert("parking", 6);
     trie.print_search("arrow");
     trie.print_search("privet");
     trie.print_search("");
     cout << trie.search("avto") << endl;
     cout << trie.search("") << endl;
     cout << trie.tree_height() << endl;
+
+/*    Node* node;
+    node = trie.search_node("avk");
+    cout << node->_value();*/
 
     return 0;
 }

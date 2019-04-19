@@ -5,38 +5,36 @@
 using namespace std;
 
 //For class Node (private)
-Node *Node::find_child(const char to_find) {
+Node *Node::find_child(const char _find) {
     for (auto &i : child) {
-        if(i->key == to_find )
+        if(i->key == _find )
             return i;
     }
     return nullptr;
 }
 
-Node *Node::find_postfix_in(Node *root, const char *postfix) {
-    if (postfix == nullptr) throw "Ошибка проверки постфикса!";
-    while(*postfix != 0 && root != nullptr) {
-        root = root->find_child(*postfix++ );
+Node *Node::find_prefix_node(Node *root, const char *prefix) {
+    while(*prefix != 0 && root != nullptr) {
+        root = root->find_child(*prefix++ );
     }
     return root;
 }
 
-Node *Node::find_or_create_child(const char to_find)
+Node *Node::find_or_create_child(const char _find)
 {
-    Node* node = find_child(to_find);
+    Node* node = find_child(_find);
     if (node == nullptr) {
-        node = new Node(to_find);
+        node = new Node(_find);
         child.push_back(node);
     }
     return node;
 }
 
-void Node::add_postfix_to(Node *node, const char *postfix, const int& value)
+void Node::add_prefix_node(Node *node, const char *prefix, const int& value)
 {
-    if (postfix == nullptr) throw "Ошибка проверки постфикса!";
     int max = 0;
-    while(*postfix != 0) {
-        node = node->find_or_create_child(*postfix++ );
+    while(*prefix != 0) {
+        node = node->find_or_create_child(*prefix++ );
         max++;
     }
     if (height < max)
@@ -53,16 +51,16 @@ void Node::clear() {
 
 //For class Node (public)
 
-void Node::add_postfix(const char *postfix, const int& _value) {
-     add_postfix_to(this, postfix, _value);
+void Node::add_prefix(const char *prefix, const int& _value) {
+     add_prefix_node(this, prefix, _value);
 }
 
-Node* Node::has_postfix(const char *postfix) {
-    return find_postfix_in(this, postfix);
+Node* Node::get_prefix_node(const char *prefix) {
+    return find_prefix_node(this, prefix);
 }
 
-bool Node::has_postfix(const char *postfix, bool &_flag) {
-    Node* node = find_postfix_in(this, postfix);
+bool Node::get_prefix(const char *prefix, bool& _flag) {
+    Node* node = find_prefix_node(this, prefix);
     if( node == nullptr )
         return false;
     _flag = node->flag;
@@ -71,22 +69,23 @@ bool Node::has_postfix(const char *postfix, bool &_flag) {
 //For class Trie
 
 void Trie::insert(const char* s, int _value) {
-    root.add_postfix(s, _value);
+    root.add_prefix(s, _value);
 }
 
-Node* Trie::search_str(const char* s) {
-    return root.has_postfix(s);
+Node* Trie::search_node(const char* s) {
+    if (root.get_prefix_node(s) == nullptr) throw "Ошибка поиска!";
+    return root.get_prefix_node(s);
 }
 
 bool Trie::search(const char* s) {
     bool _flag = false;
-    return root.has_postfix(s, _flag) && _flag;
+    return root.get_prefix(s, _flag) && _flag;
 }
 
 void Trie::print_search(const char *s) {
     if (search(s))
     {
-        Node* node = search_str(s);
+        Node* node = search_node(s);
         for ( int i = 0; '\0' !=  s[i]; i++ )
         {
             cout << s[i];
