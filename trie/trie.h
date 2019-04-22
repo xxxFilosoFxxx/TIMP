@@ -1,6 +1,4 @@
 #include <iostream>
-#include "ctime"
-#include "string"
 #include "vector"
 
 using namespace std;
@@ -8,83 +6,35 @@ using namespace std;
 class Node
 {
 private:
-
-public:
     bool flag;
     int value;
-    char* key;
-    // Node* parent;
+    char key;
     vector<Node*> child;
-    Node():flag(false) { key = nullptr; }
+    Node* find_child(char _find );
+    Node* find_or_create_child(char _find );
+    Node* find_prefix_node(Node* root, const char* prefix );
+    void add_prefix_node(Node* node, const char* prefix, const int& value);
+    void clear();
+public:
+    int height = 0;
+    Node():flag(false), key() {}
+    Node(char c):flag(false), key(c) {}
+    ~Node() { clear(); }
 
-    Node(const char* c):flag(false) { strcat(key, c); }
-
-    Node(const char* c, const int value):flag(false) {
-        strcat(key, c);
-        this->value = value;
-    }
-
-    Node* find_child(const char* to_find );
-    Node* find_postfix_in(Node* root, const char* postfix );
-    Node* find_or_create_child(const char* to_find );
-    void add_postfix_to( Node* dst, const char* postfix, const int& value);
+    int _value() { return this->value;}
+    void add_prefix(const char * prefix, const int& _value);
+    Node* get_prefix_node(const char* prefix);
+    bool get_prefix(const char* prefix, bool& _flag);
 };
-
-Node *Node::find_child(const char *to_find) {
-    for( int i = 0; i < child.size(); i++ ) {
-        if( to_find == child[i]->key)
-            return child[i];
-    }
-    return nullptr;
-}
-
-Node *Node::find_postfix_in(Node *root, const char *postfix) {
-    if (postfix == nullptr) throw "postfix is nullptr!";
-    while( postfix != nullptr && root != nullptr) {
-        root = root->find_child( postfix++ );
-    }
-    return root;
-}
-
-Node *Node::find_or_create_child(const char *to_find)
-{
-    Node* node = find_child(to_find );
-    if( node == nullptr) {
-        node = new Node( to_find );
-        child.push_back( node);
-    }
-    return node;
-}
-
-void Node::add_postfix_to(Node *dst, const char *postfix, const int& value)
-{
-    if (postfix == nullptr) throw "postfix is nullptr!";
-    while( postfix != nullptr) {
-        dst = dst->find_or_create_child( postfix++ );
-    }
-    dst->flag = true;
-    dst->value = value;
-}
-
 
 class Trie
 {
 private:
-    Node *root;
+    Node root;
 public:
-    Trie() { root = new Node(); }
-    Trie* creatRoot();
-    void insert(const string& s, int _value);
+    void insert(const char* s, int _value);
+    Node* search_node(const char* s);
+    bool search (const char* s);
+    void print_search(const char* s);
+    int tree_height();
 };
-
-Trie *Trie::creatRoot() {
-    Trie* trie = new Trie();
-    return trie;
-}
-
-
-void Trie::insert(const string &s, int _value) {
-    if (root == nullptr) { creatRoot(); }
-
-    //TODO:
-}
