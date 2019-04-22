@@ -24,10 +24,11 @@ void Graph::Union(int x, int y)  {
 }
 
 void Graph::KruskalPoisk() {
+    // Быстрая сортировка. Сложность в среднем O( n*log(n) ), но в худшем случае O( n*n )
     sort(graph.begin(), graph.end());
-    tree_id.resize(node());
+    tree_id.resize(vertex());
 
-    for (int i = 0; i < node(); i++)
+    for (int i = 0; i < vertex(); i++)
     {
         tree_id[i] = i;
     }
