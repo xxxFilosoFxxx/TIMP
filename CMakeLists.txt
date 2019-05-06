@@ -10,3 +10,5 @@ add_executable(test_task2_3 task2_3/task2-3.h task2_3/task2-3.cpp task2_3/tests.
 add_executable(task_2-3_main task2_3/task2-3.h task2_3/task2-3.cpp task2_3/main.cpp)
 add_executable(ddz_main DDZ/OstTree.h DDZ/OstTree_realize.cpp DDZ/OstTree_main.cpp)
 add_executable(ddz_test DDZ/OstTree.h DDZ/OstTree_realize.cpp DDZ/OstTree_tests.cpp)
+add_executable(test_task2_4 task2_4/task2-4.h task2_4/tests.cpp)
+add_executable(task_2-4_main task2_4/task2-4.h task2_4/main.cpp)
