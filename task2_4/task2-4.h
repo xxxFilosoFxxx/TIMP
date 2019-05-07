@@ -14,20 +14,41 @@ vector<int> Digit_sort(vector<int> vec)
 {
     auto *my_queue = new queue<int>[10]; // корзины (очереди) для хранения чисел
 
+    int size = vec.size();
     auto it = max_element(vec.begin(), vec.end());
+    int max = *it;
+    int count = 1; // Потребуется для уменьшения разряда числа
     int bit = 0;  // Разрядность максимального числа
-    while(*it >0)
+    while(max >0)
     {
-        *it = *it / 10;
+        max = max / 10;
         bit++;
     }
 
-
-    for (int i = 0; i < bit; i++)  // количество проходов
+    while (bit != 0)
     {
-        //TODO
+        auto it1 = vec.begin();
+        for (; it1 != vec.end(); it1++)
+        {
+            int a = (*it1/count) % 10;
+            for (int i = 0; i < 10; i++) {
+                if (i == a) {
+                    my_queue[i].push(*it1);
+                }
+            }
+        }
+        vec.clear();
+        for (int i = 0; i < 10; i++)
+        {
+            while (!my_queue[i].empty()) {
+                vec.push_back(my_queue[i].front());
+                my_queue[i].pop();
+            }
+        }
+        count *= 10;
+        bit--;
     }
+    delete []my_queue;
 
-    delete(my_queue);
-
+    return vec;
 }

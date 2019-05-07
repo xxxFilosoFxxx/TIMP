@@ -1,8 +1,8 @@
 #include <iostream>
 #include "vector"
-#include "queue"
 #include "fstream"
 #include "algorithm"
+#include "task2-4.h"
 
 using namespace std;
 
@@ -28,20 +28,14 @@ int main()
         }
     }
     fin.close();
-    auto it = vec.begin();
+   /* auto it = vec.begin();
     for (; it!= vec.end(); it++)
-        cout << *it << endl;
+        cout << *it << endl;*/
 
-    auto it1 = max_element(vec.begin(), vec.end());
-    cout<< *it1 << endl;
+    vec = Digit_sort(vec);
 
-    int i = 0;
-    while(*it1 >0)
-    {
-        *it1 = *it1 / 10;
-        ++i;
-    }
-    cout << i << endl;
+    for (int i : vec)
+        cout << i << ' ';
 
     return 0;
 }
