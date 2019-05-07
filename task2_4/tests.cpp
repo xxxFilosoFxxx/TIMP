@@ -29,7 +29,11 @@ TEST_CASE("Test1", "task2-4_Tests")
     }
     fin.close();
 
-    vec = Digit_sort(vec);
-
-    // TODO
+    vector<int> vec1;
+    vec1 = Digit_sort(vec);
+    REQUIRE(vec1[0] == 1);
+    REQUIRE(vec1[0] != vec[0]);
+    REQUIRE(vec1.size() == vec.size());
+    REQUIRE(vec1[10] == 1000);
+    REQUIRE(vec1[10] == vec[4]);
 }
