@@ -10,7 +10,7 @@
 
 using namespace std;
 
-vector<int> Digit_sort(vector<int> vec)
+void Digit_sort(vector<int>& vec)
 {
     auto *my_queue = new queue<int>[10]; // корзины (очереди) для хранения чисел
 
@@ -49,6 +49,4 @@ vector<int> Digit_sort(vector<int> vec)
         bit--;
     }
     delete []my_queue;
-
-    return vec;
 }

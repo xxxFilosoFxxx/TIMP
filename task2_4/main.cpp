@@ -28,12 +28,12 @@ int main()
         }
     }
     fin.close();
-   /* auto it = vec.begin();
+    auto it = vec.begin();
     for (; it!= vec.end(); it++)
-        cout << *it << endl;*/
+        cout << *it << ' ';
 
-    vec = Digit_sort(vec);
-
+    Digit_sort(vec);
+    cout << endl;
     for (int i : vec)
         cout << i << ' ';
 
