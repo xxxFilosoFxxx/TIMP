@@ -13,3 +13,5 @@ add_executable(mst_tree_test mst_tree/mst_tree.h mst_tree/mst_tree.cpp mst_tree/
 add_executable(mst_tree mst_tree/mst_tree.h mst_tree/mst_tree.cpp mst_tree/main.cpp)
 add_executable(sort_test sort/digital_sort.h sort/digital_sort.test.cpp)
 add_executable(sort sort/digital_sort.h sort/main.cpp)
+add_executable(graph_test graph/graph.h graph/graph.cpp graph/graph.test.cpp)
+add_executable(graph graph/graph.h graph/graph.cpp graph/main.cpp)
