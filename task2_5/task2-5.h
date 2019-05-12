@@ -6,14 +6,15 @@
 #include <iostream>
 #include "vector"
 #include "list"
+#include "queue"
 using namespace std;
 
 class Graph
 {
 private:
     vector<list<int>> vec;
-public:
 
+public:
     Graph(const vector<int> &vect_versh, const vector<int> &vect_edge)
     {
         vec.resize(vect_versh.size());
@@ -32,7 +33,8 @@ public:
         }
     }
     void print_list();
-    void search_graph_wide();
+    vector<int> search_graph_wide(int vertex);
+    int find_components();
 
 };
 

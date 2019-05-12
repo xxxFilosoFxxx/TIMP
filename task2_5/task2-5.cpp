@@ -7,28 +7,27 @@ using namespace std;
 void Graph::print_list() {
     for (int i = 0; i < vec.size(); i ++)
     {
-        list<int>::iterator it;
         cout << i << ":";
-        for(it = vec[i].begin(); it != vec[i].end(); it++)
+        for(auto it = vec[i].begin(); it != vec[i].end(); it++)
             cout << *it << " ";
         cout << endl;
     }
 }
 
-void Graph::search_graph_wide() {
+vector<int> Graph::search_graph_wide(int vertex) {
+    vector<int> _nodes;
     queue<int> Queue;
     int nodes[vec.size()]; // вершины графа
     int color[3] = {0, 1, 2}; // 0->white; 1->gray; 2->black
     for (int i = 0; i < vec.size(); i++)
         nodes[i] = color[0]; // исходно все вершины white
-    Queue.push(0); // помещаем в очередь первую вершину
+    Queue.push(vertex); // помещаем в очередь первую вершину
     while (!Queue.empty())
     {
         int node = Queue.front(); // извлекаем вершину
         Queue.pop();
         nodes[node] = color[2]; // отмечаем ее black
-        list<int>::iterator it;
-        for(it = vec[node].begin(); it != vec[node].end(); it++)
+        for(auto it = vec[node].begin(); it != vec[node].end(); it++)
         {
             for (int j = 0; j < vec.size(); j++) // проверяем для нее все смежные вершины
             {
@@ -39,7 +38,51 @@ void Graph::search_graph_wide() {
                 }
             }
         }
-        cout << node << endl; // выводим номер вершины
+        _nodes.push_back(node); // заносим номер вершины
+       // cout << node << endl; // выводим номер вершины
+    }
+    return _nodes;
+}
+
+int Graph::find_components() {
+    int components = 0;
+    vector<int> count, check;
+    bool use[vec.size()];
+
+    count = search_graph_wide(0);
+    components++;
+    for (auto it = count.begin(); it < count.end(); it++)
+    {
+        for (int i = 0; i < vec.size(); i++)
+        {
+            if (*it == i)
+                use[i] = true;
+        }
     }
 
+    for (int i = 0; i < vec.size(); i++)
+    {
+        if (!use[i])
+        {
+            count.push_back(-1);
+            check = search_graph_wide(i);
+            if (check.size() != 1)
+            {
+                for (auto it = check.begin(); it < check.end(); it++)
+                {
+                    for (int j = 0; j < vec.size(); j++)
+                    {
+                        if (*it == j)
+                            use[j] = true;
+                    }
+                }
+            }
+            else
+            {
+                use[i] = true;
+            }
+            components++;
+        }
+    }
+    return components;
 }

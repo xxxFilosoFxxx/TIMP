@@ -74,20 +74,13 @@ int main()
 
     cout<<endl;
 
-    g.search_graph_wide();
+    vector<int> print = g.search_graph_wide(vect_versh[3]);
+    for (auto i3 = print.begin(); i3 < print.end(); i3++)
+        std::cout << *i3 << " ";
 
-   /*vector<list<int>> vec(2);
-   vec[0].push_back(15);
-   vec[0].push_back(7);
-   vec[1].push_back(10);
-   vec[1].push_back(20);
+    int comp = g.find_components();
+    cout << endl << comp;
 
-   for (int i = 0; i < vec.size(); i ++)
-   {
-       list<int>::iterator it;
-       for (it = vec[i].begin(); it != vec[i].end(); ++it)
-           cout << *it << " ";
-       cout << endl;
-   }*/
+
     return 0;
 }
