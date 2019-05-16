@@ -1,0 +1,105 @@
+#include <iostream>
+#include "vector"
+#include "sstream"
+#include "algorithm"
+#include "search_prima.h"
+
+using namespace std;
+
+int main()
+{
+    string str = "a,b,c,d,e,ab10,ac20,cd30,ad10,bc15,de40,ce60";
+    string str1 = str;
+    vector<int> vertices;
+    vector<int> edges;
+    vector<int> weights;
+
+    int mas[26];
+    for (int i = 0; i < 26; i++)
+    {
+        mas[i] = i;
+    }
+
+    stringstream ss(str);
+    char ch;
+    int num;
+    int count = 0, k = 0;
+
+    while (ss >> ch)
+    {
+        if (ss.peek() == ',')
+        {
+            k++;
+            ss.ignore();
+        }
+
+        if (count > k - 1)
+            break;
+        count++;
+
+        for (int j = 0; j < 26; j++)
+        {
+            if (mas[j] == ((int)ch - 97))
+                vertices.push_back(j);
+        }
+    }
+
+    str1.erase(str1.begin(), str1.end() - (str1.size() - 2*count));
+    std::stringstream ss1(str1);
+
+    while (ss1 >> ch)
+    {
+        if (ss1.peek() == ',')
+        {
+            ss1.ignore();
+        }
+        for (int j = 0; j < 26; j++)
+        {
+            if (mas[j] == ((int)ch - 97))
+            {
+                edges.push_back(j);
+                str1.erase(str1.find(ch), 1);
+            }
+        }
+
+    }
+
+    std::stringstream ss2(str1);
+
+    while (ss2 >> num)
+    {
+        if (ss2.peek() == ',')
+        {
+            ss2.ignore();
+        }
+        weights.push_back(num);
+    }
+
+    for (int i = 2, j = 0; i < edges.size(), j < weights.size(); i = i + 3, j++)
+    {
+        edges.insert(edges.begin() + i, weights.at(j));
+    }
+
+    for (int i=0; i< vertices.size(); i++)
+        std::cout << vertices.at(i)<<" ";
+
+    cout<<endl;
+    for (int i=0; i< edges.size(); i++)
+        std::cout << edges.at(i)<< " ";
+    cout << endl;
+    cout << endl;
+    cout << endl;
+
+
+    Graph gr(vertices,edges);
+    gr.print_list();
+    gr.search_prima();
+    cout << endl;
+    cout << gr.sum << endl;
+    for (int i = 0; i < gr.rezult.size(); i++)
+    {
+        cout << gr.rezult[i].first << "," << gr.rezult[i].second << " ";
+    }
+
+    return 0;
+}

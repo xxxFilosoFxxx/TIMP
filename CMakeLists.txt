@@ -15,3 +15,6 @@ add_executable(sort_test sort/digital_sort.h sort/digital_sort.test.cpp)
 add_executable(sort sort/digital_sort.h sort/main.cpp)
 add_executable(graph_test graph/graph.h graph/graph.cpp graph/graph.test.cpp)
 add_executable(graph graph/graph.h graph/graph.cpp graph/main.cpp)
+add_executable(search_prima_test search_prima/search_prima.h search_prima/search_prima.cpp search_prima/search_prima.test.cpp)
+add_executable(search_prima search_prima/search_prima.h search_prima/search_prima.cpp search_prima/main.cpp)
+
