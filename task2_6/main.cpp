@@ -96,14 +96,10 @@ int main()
     gr.search_Prima();
     cout << endl;
     cout << gr.sum << endl;
-    for (auto it = gr.rezult.begin(); it != gr.rezult.end(); it++)
+    for (int i = 0; i < gr.rezult.size(); i++)
     {
-        cout << *it << " ";
+        cout << gr.rezult[i].first << "," << gr.rezult[i].second << " ";
     }
 
-
-
     return 0;
-
-
 }

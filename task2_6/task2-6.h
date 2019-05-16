@@ -17,7 +17,7 @@ private:
 public:
 
     int sum = 0;
-    vector<int> rezult;
+    vector<pair<int,int>> rezult;
     Graph(const vector<int> &vect_versh, const vector<int> &vect_edge)
     {
         vec.resize(vect_versh.size());

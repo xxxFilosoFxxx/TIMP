@@ -18,11 +18,12 @@ void Graph::print_list() {
 
 void Graph::search_Prima() {
     if (vec.empty()) throw "No MST!";
-    rezult.resize(vec.size());
-    for (auto it1 = rezult.begin(); it1 != rezult.end(); it1++)
-        *it1 = -1;
-    set<pair<int, int> > q;
+    for (int i = 0; i < vec.size(); i++)
+    {
+        rezult.emplace_back(-1, -1);
+    }
 
+    set<pair<int, int> > q;
     int min_e[vec.size()];
     for (int i = 0; i < vec.size(); i++)
     {
@@ -34,6 +35,7 @@ void Graph::search_Prima() {
 
     for (int i = 0; i < vec.size(); i++)
     {
+        rezult[i].first = i;
         int v = q.begin()->second;
         q.erase(q.begin());
         int weight = 0;
@@ -46,11 +48,11 @@ void Graph::search_Prima() {
             advance(it,1);
             weight = *it;
 
-            if (weight < min_e[to])
+            if (weight < min_e[to] && i != vec.size()-1)
             {
                 q.erase(make_pair(min_e[to],to));
                 min_e[to] = weight;
-                rezult[to] = v;
+                rezult[to].second = v;
                 q.insert(make_pair(min_e[to],to));
             }
         }
@@ -59,6 +61,12 @@ void Graph::search_Prima() {
     {
         if (min_e[i] < INT_MAX)
             sum += min_e[i];
+    }
+
+    for (auto it2 = rezult.begin(); it2 !=rezult.end(); it2++)
+    {
+        if (it2->second == -1)
+            rezult.erase(it2);
     }
 }
 
