@@ -23,8 +23,8 @@ void Graph::search_Prima() {
         rezult.emplace_back(-1, -1);
     }
 
-    set<pair<int, int> > q;
-    int min_e[vec.size()];
+    set<pair<int, int> > q;   // очередь из всех вершин в порядке увеличения их меток min_e
+    int min_e[vec.size()];    // хранит вес наименьшего допустимого ребра из вершины i
     for (int i = 0; i < vec.size(); i++)
     {
         min_e[i] = INT_MAX;
@@ -35,18 +35,18 @@ void Graph::search_Prima() {
 
     for (int i = 0; i < vec.size(); i++)
     {
-        rezult[i].first = i;
         int v = q.begin()->second;
+        rezult[v].first = v;
         q.erase(q.begin());
         int weight = 0;
         for (int j = 0, z = 0; j < vec[v].size(), z < vec[v].size(); j++, z = z + 2)
         {
             auto it = vec[v].begin();
             advance(it,z);
-            int to = *it;
+            int to = *it;  // второй конец ребра
 
             advance(it,1);
-            weight = *it;
+            weight = *it;  // вес ребра
 
             if (weight < min_e[to] && i != vec.size()-1)
             {
