@@ -1,2 +1,2 @@
 # TIMP
-Описание различных алгоритмов
+Description of various algorithms
